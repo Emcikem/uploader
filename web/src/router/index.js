@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Uploader from '@/components/Uploader'
+import FileUploader from '@/components/FileUploader'
 
 Vue.use(Router)
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Uploader',
-      component: Uploader
+      name: 'FileUploader',
+      component: FileUploader
     }
   ]
 })

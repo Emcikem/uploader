@@ -1,12 +1,13 @@
 package com.lyq.fileuploader.service.impl;
 
+import com.lyq.fileuploader.enume.FileStrategy;
 import com.lyq.fileuploader.service.IFileService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service("OSS")
+@Service()
 public class OSSFIleServiceImpl implements IFileService {
 
     @Override
@@ -30,12 +31,15 @@ public class OSSFIleServiceImpl implements IFileService {
     }
 
     @Override
-    public void copyFile(InputStream inputStream, String filePath) throws IOException {
-
-    }
+    public void copyFile(InputStream inputStream, String filePath) throws IOException {}
 
     @Override
     public boolean mergeChunks(String chunkFileFolderPath, String filePath, Integer totalChunks) {
         return false;
+    }
+
+    @Override
+    public String getType() {
+        return FileStrategy.OSS.getType();
     }
 }

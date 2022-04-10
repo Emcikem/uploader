@@ -3,6 +3,7 @@ package com.lyq.fileuploader;
 import com.lyq.fileuploader.dto.FileChunkDTO;
 import com.lyq.fileuploader.dto.FileChunkResultDTO;
 import com.lyq.fileuploader.service.IUploadService;
+import com.lyq.fileuploader.service.StrategyService;
 import com.lyq.fileuploader.service.impl.UploadServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,14 @@ class FileUploaderApplicationTests {
     @Test
     public void delete() {
 //        UploadServiceImpl.deleteDirectory("/Users/emcikem/Downloads/java-upload-master/file-uploader/src/test/java/com/lyq/fileuploader/myfile");
+    }
+
+    @Autowired
+    private StrategyService strategyService;
+
+    @Test
+    public void initStrategy() {
+        strategyService.changeStrategy("LOCAL");
     }
 
     @Test

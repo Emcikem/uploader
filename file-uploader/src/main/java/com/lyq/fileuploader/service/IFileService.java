@@ -42,4 +42,9 @@ public interface IFileService {
      * 合并分片
      */
     boolean mergeChunks(String chunkFileFolderPath, String filePath, Integer totalChunks);
+
+    /**
+     * 存储策略
+     */
+    String getType();
 }

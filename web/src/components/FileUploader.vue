@@ -1,7 +1,7 @@
 <template>
   <div>
     <uploader
-      :autoStart="false"
+      :autoStart="true"
       :options="options"
       :file-status-text="statusText"
       class="uploader-example"
@@ -14,8 +14,10 @@
       <uploader-drop>
         <p>Drop files here to upload or</p>
         <uploader-btn>select files</uploader-btn>
+        <uploader-btn :attrs="attrs">select images</uploader-btn>
         <uploader-btn :directory="true">select folder</uploader-btn>
       </uploader-drop>
+      <!-- <uploader-list></uploader-list> -->
       <uploader-files> </uploader-files>
     </uploader>
     <br />
@@ -37,6 +39,7 @@ export default {
         // 开启服务端分片校验功能
         testChunks: true,
         chunkSize: 10 * 1024 * 1024,
+        maxChunkRetries: 3,
         parseTimeRemaining: function (timeRemaining, parsedTimeRemaining) {
           return parsedTimeRemaining
             .replace(/\syears?/, "年")
@@ -54,6 +57,9 @@ export default {
           }
           return (result.data.uploaded || []).indexOf(chunk.offset + 1) >= 0;
         },
+      },
+      attrs: {
+        accept: "image/*",
       },
       statusText: {
         success: "上传成功",
@@ -74,12 +80,21 @@ export default {
   },
   methods: {
     fileSuccess(rootFile, file, response, chunk) {
+      // console.log(rootFile);
+      // console.log(file);
+      // console.log(message);
+      // console.log(chunk);
+      const result = JSON.parse(response);
+      console.log(result.success, this.skip);
+
       if (result.success && !this.skip) {
-        axios.post("http://127.0.0.1:8989/upload/merge", {
+        axios
+          .post("http://127.0.0.1:8989/upload/merge", {
             identifier: file.uniqueIdentifier,
             filename: file.name,
             totalChunks: chunk.offset,
-          }).then((res) => {
+          })
+          .then((res) => {
             if (res.data.success) {
               console.log("上传成功");
             } else {

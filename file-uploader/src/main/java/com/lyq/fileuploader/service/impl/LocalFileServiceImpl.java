@@ -1,17 +1,15 @@
 package com.lyq.fileuploader.service.impl;
 
+import com.lyq.fileuploader.enume.FileStrategy;
 import com.lyq.fileuploader.service.IFileService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.assertj.core.util.diff.Chunk;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
-@Service("Local")
+@Service
 public class LocalFileServiceImpl implements IFileService {
 
     @Override
@@ -78,7 +76,7 @@ public class LocalFileServiceImpl implements IFileService {
                 byte[] bytes = new byte[1024];
                 for (File chunk : chunks) {
                     RandomAccessFile randomAccessFileReader = new RandomAccessFile(chunk, "r");
-                    int len = 0;
+                    int len;
                     while ((len = randomAccessFileReader.read(bytes)) != -1) {
                         randomAccessFileWriter.write(bytes, 0, len);
                     }
@@ -91,6 +89,11 @@ public class LocalFileServiceImpl implements IFileService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getType() {
+        return FileStrategy.LOCAL.getType();
     }
 
     /**
