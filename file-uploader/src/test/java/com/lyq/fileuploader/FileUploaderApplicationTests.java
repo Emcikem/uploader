@@ -41,7 +41,7 @@ class FileUploaderApplicationTests {
 
     @Test
     public void initStrategy() {
-        strategyService.changeStrategy("LOCAL");
+        strategyService.changeStoreStrategy("LOCAL");
     }
 
     @Test

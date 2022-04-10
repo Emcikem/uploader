@@ -14,7 +14,12 @@ public class StrategyServiceImpl implements StrategyService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public void changeStrategy(String type) {
+    public void changeStoreStrategy(String type) {
         redisTemplate.opsForHash().put(RedisConst.STRATEGY, RedisConst.STORE, type);
+    }
+
+    @Override
+    public void changeFolderPath(String path) {
+        redisTemplate.opsForHash().put(RedisConst.STRATEGY, RedisConst.UPLOADERFOLDER, path);
     }
 }

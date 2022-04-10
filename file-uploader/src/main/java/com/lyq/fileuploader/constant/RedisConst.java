@@ -12,6 +12,10 @@ public class RedisConst {
      * 存储方式
      */
     public static final String STORE = "store";
+    /**
+     * 文件存储位置
+     */
+    public static final String UPLOADERFOLDER = "uploadFolder";
 
 
 

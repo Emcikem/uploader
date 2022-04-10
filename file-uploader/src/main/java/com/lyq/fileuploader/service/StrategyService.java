@@ -3,5 +3,7 @@ package com.lyq.fileuploader.service;
 
 public interface StrategyService {
 
-    void changeStrategy(String type);
+    void changeStoreStrategy(String type);
+
+    void changeFolderPath(String path);
 }
