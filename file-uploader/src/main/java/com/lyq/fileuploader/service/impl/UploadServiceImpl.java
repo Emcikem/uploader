@@ -7,7 +7,6 @@ import com.lyq.fileuploader.dto.FileChunkResultDTO;
 import com.lyq.fileuploader.service.IFileService;
 import com.lyq.fileuploader.service.IUploadService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +23,6 @@ public class UploadServiceImpl implements IUploadService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Value("${uploadFolder}")
-    private String uploadFolder;
 
     @Resource
     private FileServiceStrategy strategy;
@@ -132,6 +129,7 @@ public class UploadServiceImpl implements IUploadService {
      * 得到文件存储的绝对路径
      */
     private String getFilePath(String filename) {
+        String uploadFolder = getUploadFolder();
         return String.format("%s/%s", uploadFolder, filename);
     }
 
@@ -140,6 +138,7 @@ public class UploadServiceImpl implements IUploadService {
      * 得到文件所属的目录(存放分片文件)
      */
     private String getFileFolderPath(String identifier) {
+        String uploadFolder = getUploadFolder();
         return String.format("%s/chunk/%s/", uploadFolder, identifier);
     }
 
@@ -148,7 +147,11 @@ public class UploadServiceImpl implements IUploadService {
      * 从redis的业务数据里获取存储策略，通过策略模式返回策略接口
      */
     private IFileService getFileStrategy () {
-        String type = (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.STORE);
+        String type = (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.STORESTRATEGY);
         return strategy.getStrategy(type);
+    }
+
+    private String getUploadFolder () {
+        return (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.UPLOADERFOLDER);
     }
 }

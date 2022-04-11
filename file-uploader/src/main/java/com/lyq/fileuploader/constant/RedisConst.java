@@ -1,5 +1,8 @@
 package com.lyq.fileuploader.constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RedisConst {
 
 
@@ -11,13 +14,20 @@ public class RedisConst {
     /**
      * 存储方式
      */
-    public static final String STORE = "store";
+    public static final String STORESTRATEGY = "storeStrategy";
     /**
      * 文件存储位置
      */
     public static final String UPLOADERFOLDER = "uploadFolder";
+    /**
+     * 是否合并分片存储
+     */
+    public static final String ISMERGESTORE = "isMergeStore";
 
 
+
+
+    // 分片信息
 
     /**
      * 已上传的分片下标集合

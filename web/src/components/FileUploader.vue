@@ -14,7 +14,6 @@
       <uploader-drop>
         <p>Drop files here to upload or</p>
         <uploader-btn>select files</uploader-btn>
-        <uploader-btn :attrs="attrs">select images</uploader-btn>
         <uploader-btn :directory="true">select folder</uploader-btn>
       </uploader-drop>
       <!-- <uploader-list></uploader-list> -->
@@ -57,9 +56,6 @@ export default {
           }
           return (result.data.uploaded || []).indexOf(chunk.offset + 1) >= 0;
         },
-      },
-      attrs: {
-        accept: "image/*",
       },
       statusText: {
         success: "上传成功",
@@ -135,7 +131,7 @@ export default {
         File.prototype.mozSlice ||
         File.prototype.webkitSlice;
       let currentChunk = 0;
-      const chunkSize = 1024 * 1024;
+      const chunkSize = 1024 * 1024 * 10;
       let chunks = Math.ceil(file.size / chunkSize);
       let spark = new SparkMD5.ArrayBuffer();
       // 文件状态设为"计算MD5"

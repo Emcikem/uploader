@@ -18,15 +18,27 @@ public class StrategyController {
     /**
      * 改成存储的策略
      */
-    @GetMapping("/111")
+    @GetMapping("storeStrategy")
     public RestApiResponse<Object> changeStoreStrategy (String type) {
         strategyService.changeStoreStrategy(type);
         return RestApiResponse.success();
     }
 
-    @GetMapping("/222")
+    /***
+     * 改变存储的地址
+     */
+    @GetMapping("changePath")
     public RestApiResponse<Object> changeFolderPath (String path) {
         strategyService.changeFolderPath(path);
+        return RestApiResponse.success();
+    }
+
+    /***
+     * 是否分片存储
+     */
+    @GetMapping("isMerge")
+    public RestApiResponse<Object> isMergeStore (Boolean isMerge) {
+        strategyService.isMergeStore(isMerge);
         return RestApiResponse.success();
     }
 }

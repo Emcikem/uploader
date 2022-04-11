@@ -13,6 +13,3 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
 
-
-uploadFolder: /Users/emcikem/Desktop
-
