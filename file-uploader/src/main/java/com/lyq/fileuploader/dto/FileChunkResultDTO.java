@@ -1,6 +1,5 @@
 package com.lyq.fileuploader.dto;
 
-import lombok.Data;
 import lombok.ToString;
 
 import java.util.Set;

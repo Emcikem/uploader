@@ -1,11 +1,13 @@
 package com.lyq.fileuploader.dto;
 
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件分片
  *
  **/
+@ToString
 public class FileChunkDTO {
     /**
      * 文件md5
@@ -105,17 +107,4 @@ public class FileChunkDTO {
         this.filename = filename;
     }
 
-    @Override
-    public String toString() {
-        return "FileChunkDTO{" +
-                "identifier='" + identifier + '\'' +
-                ", file=" + file +
-                ", chunkNumber=" + chunkNumber +
-                ", chunkSize=" + chunkSize +
-                ", currentChunkSize=" + currentChunkSize +
-                ", totalSize=" + totalSize +
-                ", totalChunks=" + totalChunks +
-                ", filename='" + filename + '\'' +
-                '}';
-    }
 }
