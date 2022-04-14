@@ -1,5 +1,6 @@
 package com.lyq.fileuploader;
 
+import com.lyq.fileuploader.dto.StrategyConfigDTO;
 import com.lyq.fileuploader.service.StrategyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,17 @@ public class StrategyTest extends BaseTest{
 
     @Test
     public void initStrategy() {
-        strategyService.changeStoreStrategy("LOCAL");
-        strategyService.changeFolderPath("/Users/emcikem/Desktop");
-        strategyService.isMergeStore(true);
+        StrategyConfigDTO strategyConfigDTO = StrategyConfigDTO.builder()
+                .shouldMerge(true)
+                .folderPath("/Users/emcikem/Desktop")
+                .storeType("LOCAL")
+                .build();
+        strategyService.saveStrategyConfig(strategyConfigDTO);
     }
 
     @Test
     public void queryStrategy() {
-        System.out.println(strategyService.getStrategy());
+        System.out.println(strategyService.queryStrategy());
     }
 
 }

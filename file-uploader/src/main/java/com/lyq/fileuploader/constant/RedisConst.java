@@ -1,8 +1,5 @@
 package com.lyq.fileuploader.constant;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RedisConst {
 
 
@@ -14,7 +11,7 @@ public class RedisConst {
     /**
      * 存储方式
      */
-    public static final String STORESTRATEGY = "storeStrategy";
+    public static final String STORETYPE = "storeType";
     /**
      * 文件存储位置
      */

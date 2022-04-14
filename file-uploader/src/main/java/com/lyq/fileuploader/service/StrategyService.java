@@ -5,11 +5,7 @@ import com.lyq.fileuploader.dto.StrategyConfigDTO;
 
 public interface StrategyService {
 
-    void changeStoreStrategy(String type);
+    StrategyConfigDTO queryStrategy();
 
-    void changeFolderPath(String path);
-
-    void isMergeStore(Boolean isMergeStore);
-
-    StrategyConfigDTO getStrategy();
+    void saveStrategyConfig(StrategyConfigDTO config);
 }

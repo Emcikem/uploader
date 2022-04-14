@@ -48,6 +48,7 @@ public class UploadServiceImpl implements IUploadService {
 
         // 3. 创建文件夹用于做分片
         String chunkFileFolderPath = getFileFolderPath(chunkDTO.getIdentifier());
+        log.info("chunkFileFolderPath: {}", chunkFileFolderPath);
         boolean mkdirs = getFileStrategy().mkdirs(chunkFileFolderPath);
         log.info("准备工作,创建文件夹,fileFolderPath:{},mkdirs:{}", chunkFileFolderPath, mkdirs);
 
@@ -147,7 +148,7 @@ public class UploadServiceImpl implements IUploadService {
      * 从redis的业务数据里获取存储策略，通过策略模式返回策略接口
      */
     private IFileService getFileStrategy () {
-        String type = (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.STORESTRATEGY);
+        String type = (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.STORETYPE);
         return strategy.getStrategy(type);
     }
 

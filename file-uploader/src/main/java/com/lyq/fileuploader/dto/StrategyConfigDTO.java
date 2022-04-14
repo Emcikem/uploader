@@ -3,14 +3,17 @@ package com.lyq.fileuploader.dto;
 import lombok.Builder;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @ToString
 @Builder
-public class StrategyConfigDTO {
+public class StrategyConfigDTO implements Serializable {
 
+    private static final long serialVersionUID = 2160977717064646184L;
     /**
      * 存储策略
      */
-    private String storeStrategy;
+    private String storeType;
 
     /**
      * 存储路径
@@ -20,14 +23,14 @@ public class StrategyConfigDTO {
     /**
      * 是否合并分片存储
      */
-    private Boolean isMerge;
+    private Boolean shouldMerge;
 
-    public String getStoreStrategy() {
-        return storeStrategy;
+    public String getStoreType() {
+        return storeType;
     }
 
-    public void setStoreStrategy(String storeStrategy) {
-        this.storeStrategy = storeStrategy;
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
     }
 
     public String getFolderPath() {
@@ -38,11 +41,11 @@ public class StrategyConfigDTO {
         this.folderPath = folderPath;
     }
 
-    public Boolean getChunks() {
-        return isMerge;
+    public Boolean getShouldMerge() {
+        return shouldMerge;
     }
 
-    public void setChunks(Boolean chunks) {
-        isMerge = chunks;
+    public void setShouldMerge(Boolean shouldMerge) {
+        this.shouldMerge = shouldMerge;
     }
 }

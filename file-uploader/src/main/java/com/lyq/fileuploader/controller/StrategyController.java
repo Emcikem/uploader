@@ -1,11 +1,10 @@
 package com.lyq.fileuploader.controller;
 
+import com.lyq.fileuploader.dto.StrategyConfigDTO;
 import com.lyq.fileuploader.response.RestApiResponse;
 import com.lyq.fileuploader.service.StrategyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("strategy")
@@ -15,30 +14,17 @@ public class StrategyController {
     @Autowired
     private StrategyService strategyService;
 
-    /**
-     * 改成存储的策略
-     */
-    @GetMapping("storeStrategy")
-    public RestApiResponse<Object> changeStoreStrategy (String type) {
-        strategyService.changeStoreStrategy(type);
-        return RestApiResponse.success();
+
+
+    @GetMapping("query")
+    public RestApiResponse<Object> queryStrategy() {
+        StrategyConfigDTO strategy = strategyService.queryStrategy();
+        return RestApiResponse.success(strategy);
     }
 
-    /***
-     * 改变存储的地址
-     */
-    @GetMapping("changePath")
-    public RestApiResponse<Object> changeFolderPath (String path) {
-        strategyService.changeFolderPath(path);
-        return RestApiResponse.success();
-    }
-
-    /***
-     * 是否分片存储
-     */
-    @GetMapping("isMerge")
-    public RestApiResponse<Object> isMergeStore (Boolean isMerge) {
-        strategyService.isMergeStore(isMerge);
+    @PostMapping("save")
+    public RestApiResponse<Object> saveStrategy(@RequestBody StrategyConfigDTO configDTO) {
+        strategyService.saveStrategyConfig(configDTO);
         return RestApiResponse.success();
     }
 }

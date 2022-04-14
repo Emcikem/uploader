@@ -17,7 +17,7 @@ public class UploadController {
     /**
      * 检查分片是否存在
      */
-    @GetMapping("chunk")
+    @GetMapping("/chunk")
     public RestApiResponse<Object> checkChunkExist(FileChunkDTO chunkDTO) {
         FileChunkResultDTO fileChunkResultDTO = uploadService.checkChunkExist(chunkDTO);
         return RestApiResponse.success(fileChunkResultDTO);

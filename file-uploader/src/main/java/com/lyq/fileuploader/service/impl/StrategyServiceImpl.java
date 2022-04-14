@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -16,29 +17,23 @@ public class StrategyServiceImpl implements StrategyService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public void changeStoreStrategy(String type) {
-        redisTemplate.opsForHash().put(RedisConst.STRATEGY, RedisConst.STORESTRATEGY, type);
-    }
-
-    @Override
-    public void changeFolderPath(String path) {
-        redisTemplate.opsForHash().put(RedisConst.STRATEGY, RedisConst.UPLOADERFOLDER, path);
-    }
-
-    @Override
-    public void isMergeStore(Boolean isMergeStore) {
-        redisTemplate.opsForHash().put(RedisConst.STRATEGY, RedisConst.ISMERGESTORE, String.valueOf(isMergeStore));
-    }
-
-    @Override
-    public StrategyConfigDTO getStrategy() {
+    public StrategyConfigDTO queryStrategy() {
         Map<Object, Object> entries = redisTemplate.opsForHash().entries(RedisConst.STRATEGY);
 
         return StrategyConfigDTO.builder()
-                .storeStrategy((String) entries.get(RedisConst.STORESTRATEGY))
+                .storeType((String) entries.get(RedisConst.STORETYPE))
                 .folderPath((String) entries.get(RedisConst.UPLOADERFOLDER))
-                .isMerge(Boolean.parseBoolean((String) entries.get(RedisConst.ISMERGESTORE)))
+                .shouldMerge(Boolean.parseBoolean((String) entries.get(RedisConst.ISMERGESTORE)))
                 .build();
+    }
+
+    @Override
+    public void saveStrategyConfig(StrategyConfigDTO config) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(RedisConst.ISMERGESTORE, String.valueOf(config.getShouldMerge()));
+        map.put(RedisConst.UPLOADERFOLDER, config.getFolderPath());
+        map.put(RedisConst.STORETYPE, config.getStoreType());
+        redisTemplate.opsForHash().putAll(RedisConst.STRATEGY, map);
     }
 
 }
