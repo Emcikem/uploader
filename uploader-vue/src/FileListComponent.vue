@@ -25,8 +25,8 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      @size-change="handleChange"
-      @current-change="handleChange"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
       :current-page.sync="pageNo"
       :page-sizes="[10, 50, 100]"
       :page-size="pageSize"
@@ -43,15 +43,17 @@
 
 <script>
 import axios from "axios";
+import Bus from './bus.js'
 export default {
   name: "FileListComponent",
   data() {
     return {
       pageNo: 0,
       pageSize: 10,
-      total: 50,
+      total: 0,
       tableData: [],
-      multipleSelection: []
+      multipleSelection: [],
+      keyWord: '',
     }
   },
   methods: {
@@ -70,12 +72,20 @@ export default {
     formatSize(totalSize) {
       return (totalSize == null ? 0 : totalSize / 1024).toFixed(2) + "MB";
     },
+    handleCurrentChange(val) {
+      this.pageNo = val
+      this.handleChange()
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.handleChange()
+    },
     handleChange() {
       axios.get('http://127.0.0.1:8989/search/fileList', {
         params: {
           pageNo: this.pageNo,
           pageSize: this.pageSize,
-          keyWord: ''
+          keyWord: this.keyWord
         }
       }).then((res) => {
         if (res.data.success) {
@@ -90,6 +100,10 @@ export default {
   },
   created: function () {
     this.handleChange()
+    Bus.$on('deliverSearchWord', keyWord => {
+      this.keyWord = keyWord
+      this.handleChange()
+    })
   }
 }
 </script>

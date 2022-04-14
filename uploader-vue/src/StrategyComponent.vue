@@ -91,7 +91,7 @@ export default {
         let result = res.data.data
         this.ruleForm.shouldMerge = result.shouldMerge
         this.ruleForm.folderPath = result.folderPath
-        this.ruleForm.storeType = result.storeType
+        this.ruleForm.storeType = result.storeType == null ? '本地存储' : result.storeType
       }
     }).catch(err => console.log(err))
   }

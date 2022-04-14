@@ -4,7 +4,12 @@
       style="width: 120px; height: 187px"
       :src="url"></el-image>
     <div>
-      <el-input v-model="searchWord" placeholder="请输入内容" style="width: 400px"></el-input>
+      <el-input
+        v-model="searchWord"
+        placeholder="请输入内容"
+        @change="searchFile"
+        style="width: 400px">
+      </el-input>
       <el-button
         icon="el-icon-search"
         type="primary"
@@ -16,7 +21,7 @@
 </template>
 
 <script>
-
+import Bus from './bus'
 export default {
   name: "SearchComponent",
   data() {
@@ -27,7 +32,7 @@ export default {
   },
   methods: {
     searchFile() {
-      alert(this.searchWord)
+      Bus.$emit('deliverSearchWord', this.searchWord)
     }
   }
 }

@@ -2,9 +2,7 @@
   <div>
     <uploaderComponent></uploaderComponent>
     <div style="height: 100px"></div>
-    <SearchComponent></SearchComponent>
-    <div style="height: 20px"></div>
-    <file-list-component></file-list-component>
+    <SearchFileList></SearchFileList>
     <div style="height: 300px"></div>
     <strategy-component></strategy-component>
   </div>
@@ -15,6 +13,7 @@ import uploaderComponent from "./UploaderComponent";
 import fileListComponent from "./FileListComponent";
 import StrategyComponent from "./StrategyComponent";
 import SearchComponent from "./SearchComponent";
+import SearchFileList from "./SearchFileList";
 export default {
   name: 'app',
   components: {
@@ -22,6 +21,7 @@ export default {
     fileListComponent,
     StrategyComponent,
     SearchComponent,
+    SearchFileList,
   },
   data () {
     return {
