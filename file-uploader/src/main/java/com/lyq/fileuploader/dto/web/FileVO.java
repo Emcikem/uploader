@@ -12,6 +12,8 @@ public class FileVO {
 
     private Long totalSize;
 
+    private Long updateTime;
+
 
     public String getFileName() {
         return fileName;
@@ -35,5 +37,13 @@ public class FileVO {
 
     public void setTotalSize(Long totalSize) {
         this.totalSize = totalSize;
+    }
+
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
     }
 }

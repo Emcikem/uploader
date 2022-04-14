@@ -1,13 +1,14 @@
 package com.lyq.fileuploader.service.impl;
 
 import com.lyq.fileuploader.dto.es.FileDOC;
+import com.lyq.fileuploader.dto.web.FilePageVO;
 import com.lyq.fileuploader.dto.web.FileVO;
 import com.lyq.fileuploader.mapstruct.FileDocMapper;
 import com.lyq.fileuploader.repository.FIleDocRepository;
 import com.lyq.fileuploader.service.IFIleSearchService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -30,7 +31,22 @@ public class FileSearchServiceImpl implements IFIleSearchService {
     private FIleDocRepository repository;
 
     @Override
-    public Page<FileVO> search(String keyword, Pageable pageable) {
+    public FilePageVO<FileVO> search(String keyword, Pageable pageable) {
+
+        if (StringUtils.isBlank(keyword)) {
+            Page<FileDOC> all = repository.findAll(pageable);
+
+            List<FileVO> collect = all.getContent()
+                    .stream()
+                    .map(FileDocMapper.INSTANCE::doc2Vo)
+                    .collect(Collectors.toList());
+
+            return new FilePageVO<>(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    all.getTotalElements(),
+                    collect);
+        }
 
         Criteria criteria = new Criteria();
         criteria.and(new Criteria("fileName").matches(keyword));
@@ -42,8 +58,16 @@ public class FileSearchServiceImpl implements IFIleSearchService {
                 .map(SearchHit::getContent)
                 .collect(Collectors.toList());
 
-        Page<FileDOC> docPage = new PageImpl<>(collectDocs, pageable, searchHits.getTotalHits());
-        return docPage.map(FileDocMapper.INSTANCE::doc2Vo);
+        List<FileVO> collectVO = collectDocs
+                .stream()
+                .map(FileDocMapper.INSTANCE::doc2Vo)
+                .collect(Collectors.toList());
+
+        return new FilePageVO<>(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                searchHits.getTotalHits(),
+                collectVO);
     }
 
 

@@ -33,6 +33,12 @@ public class FileDOC {
     @Field(type = FieldType.Long)
     private Long totalSize;
 
+    /**
+     * 文件更新时间
+     */
+    @Field(type = FieldType.Long)
+    private Long updateTime;
+
     public Long getId() {
         return id;
     }
