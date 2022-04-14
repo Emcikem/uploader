@@ -1,0 +1,99 @@
+<template>
+  <div style="text-align: center">
+    <el-table
+      ref="multipleTable"
+      :data="tableData"
+      border
+      tooltip-effect="dark"
+      style="margin: auto;"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection">
+      </el-table-column>
+      <el-table-column
+        prop="fileName"
+        label="文件名">
+      </el-table-column>
+      <el-table-column
+        label="文件大小">
+        <template v-slot="scope">{{ formatSize(scope.row.totalSize) }}</template>
+      </el-table-column>
+      <el-table-column
+        label="修改日期"
+        show-overflow-tooltip>
+        <template v-slot="scope">{{ formatTime(scope.row.updateTime) }}</template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      @size-change="handleChange"
+      @current-change="handleChange"
+      :current-page.sync="pageNo"
+      :page-sizes="[10, 50, 100]"
+      :page-size="pageSize"
+      layout="sizes, prev, pager, next"
+      :total="total">
+    </el-pagination>
+
+    <div style="margin-top: 20px">
+      <el-button @click="downLoad">下载</el-button>
+      <el-button @click="deleteFile">删除</el-button>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+export default {
+  name: "FileListComponent",
+  data() {
+    return {
+      pageNo: 0,
+      pageSize: 10,
+      total: 50,
+      tableData: [],
+      multipleSelection: []
+    }
+  },
+  methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    downLoad() {
+      alert('下载')
+    },
+    deleteFile() {
+      alert('删除')
+    },
+    formatTime(updateTime) {
+      return updateTime == null ? new Date() : updateTime
+    },
+    formatSize(totalSize) {
+      return (totalSize == null ? 0 : totalSize / 1024).toFixed(2) + "MB";
+    },
+    handleChange() {
+      axios.get('http://127.0.0.1:8989/search/fileList', {
+        params: {
+          pageNo: this.pageNo,
+          pageSize: this.pageSize,
+          keyWord: ''
+        }
+      }).then((res) => {
+        if (res.data.success) {
+          let result = res.data.data
+          this.total = result.total
+          this.pageNo = result.pageNo
+          this.pageSize = result.pageSize
+          this.tableData = result.content
+        }
+      }).catch(err => console.log(err))
+    }
+  },
+  created: function () {
+    this.handleChange()
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
