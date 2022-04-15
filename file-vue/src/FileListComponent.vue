@@ -112,12 +112,19 @@ export default {
     // 鼠标进入时的操作
     handleMouseEnter(row) {
       this.identifier = row.identifier
+    },
+    initPage() {
+      this.pageNo = 0
+      this.pageSize = 10
+      this.total = 0
+      this.keyWord = ''
     }
   },
   created: function () {
     this.handleChange()
     // 搜索框搜索的监听事件，兄弟组件通信
     Bus.$on('deliverSearchWord', keyWord => {
+      this.initPage()
       this.keyWord = keyWord
       this.handleChange()
     })
