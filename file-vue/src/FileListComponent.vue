@@ -76,9 +76,6 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
-    downLoad() {
-      alert('下载')
-    },
     // 当前页修改时
     handleCurrentChange(val) {
       this.pageNo = val
@@ -130,6 +127,8 @@ export default {
         this.deleteFile(row.identifier)
       } else if (command === 'command_rename') {
         this.reNameFile(row.identifier, 'aasa')
+      } else if (command === 'command_download') {
+        this.downLoadFile(row.identifier)
       }
     },
     // 删除文件
@@ -145,18 +144,25 @@ export default {
         }
       }).catch(err => console.log(err))
     },
-    // 删除文件
+    // 重命名
     reNameFile(identifier, name) {
-      axios.delete('http://110.40.220.211:8989/option/reName', {
+      axios.get('http://110.40.220.211:8989/option/reName', {
         params: { identifier: identifier, name: name}
       }).then((res) => {
         if (res.data.success) {
-          this.$message({message: '删除成功', type: 'success'})
+          this.$message({message: '重命名成功', type: 'success'})
         } else {
-          this.$message({message: '删除失败', type: 'error'})
+          this.$message({message: '重命名失败', type: 'error'})
         }
       }).catch(err => console.log(err))
-    }
+    },
+    downLoadFile() {
+      let link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = 'https://m.bbs.mihoyo.com/app/mihoyobbs_2.26.1_gf.apk'
+      document.body.appendChild(link);
+      link.click();
+    },
   },
   created: function () {
     this.handleChange()
