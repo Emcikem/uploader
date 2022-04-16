@@ -2,6 +2,7 @@ package com.lyq.file.dto.es;
 
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -13,6 +14,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "search_file")
 @ToString
 @Builder
+@Data
 public class FileDOC {
 
     @Id
@@ -39,35 +41,4 @@ public class FileDOC {
     @Field(type = FieldType.Long)
     private Long updateTime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public Long getTotalSize() {
-        return totalSize;
-    }
-
-    public void setTotalSize(Long totalSize) {
-        this.totalSize = totalSize;
-    }
 }

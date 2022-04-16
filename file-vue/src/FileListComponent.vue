@@ -15,11 +15,19 @@
         label="文件名">
         <template v-slot="scope">
           {{scope.row.fileName}}
-          <DropdownOperationComponent
-            v-show="scope.row.identifier===identifier">
-          </DropdownOperationComponent>
+          <el-dropdown @command="(command)=>{handleCommand(command, scope.row)}" v-show="scope.row.identifier===identifier">
+            <span class="el-dropdown-link">
+              操作<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="command_download">下载</el-dropdown-item>
+              <el-dropdown-item command="command_delete">删除</el-dropdown-item>
+              <el-dropdown-item command="command_rename">重命名</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
+
       <el-table-column
         label="文件大小">
         <template v-slot="scope">{{ formatSize(scope.row.totalSize) }}</template>
@@ -43,20 +51,16 @@
 
     <div style="margin-top: 20px">
       <el-button @click="downLoad">下载</el-button>
-      <el-button @click="deleteFile">删除</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import { formatDate } from '@/utils/date'
 import axios from "axios";
 import Bus from './bus.js'
-import DropdownOperationComponent from "./DropdownOperationComponent";
 export default {
   name: "FileListComponent",
-  components: {
-    DropdownOperationComponent,
-  },
   data() {
     return {
       pageNo: 0,
@@ -75,15 +79,6 @@ export default {
     downLoad() {
       alert('下载')
     },
-    deleteFile() {
-      alert('删除')
-    },
-    formatTime(updateTime) {
-      return updateTime
-    },
-    formatSize(totalSize) {
-      return (totalSize == null ? 0 : totalSize / 1024 / 1024).toFixed(2) + "MB";
-    },
     // 当前页修改时
     handleCurrentChange(val) {
       this.pageNo = val
@@ -95,6 +90,7 @@ export default {
       this.pageSize = val
       this.handleChange()
     },
+    // 查询数据
     handleChange() {
       axios.get('http://110.40.220.211:8989/search/fileList', {
         params: {
@@ -121,6 +117,45 @@ export default {
       this.pageSize = 10
       this.total = 0
       this.keyWord = ''
+    },
+    formatTime(updateTime) {
+      return updateTime == null ? 'null' : formatDate(new Date(updateTime), 'yyyy-MM-dd hh:mm:ss')
+    },
+    formatSize(totalSize) {
+      return (totalSize == null ? 0 : totalSize / 1024 / 1024).toFixed(2) + "MB";
+    },
+    // 下拉菜单
+    handleCommand(command, row) {
+      if (command === 'command_delete') {
+        this.deleteFile(row.identifier)
+      } else if (command === 'command_rename') {
+        this.reNameFile(row.identifier, 'aasa')
+      }
+    },
+    // 删除文件
+    deleteFile(identifier) {
+      axios.delete('http://110.40.220.211:8989/option/delete', {
+        params: { identifier: identifier}
+      }).then((res) => {
+        if (res.data.success) {
+          this.$message({message: '删除成功', type: 'success'})
+          // TODO:数据进行更新，有个问题：你修改的是数据库的数据，但查询的是es的数据，canal同步时出错了怎么办
+        } else {
+          this.$message({message: '删除成功', type: 'error'})
+        }
+      }).catch(err => console.log(err))
+    },
+    // 删除文件
+    reNameFile(identifier, name) {
+      axios.delete('http://110.40.220.211:8989/option/reName', {
+        params: { identifier: identifier, name: name}
+      }).then((res) => {
+        if (res.data.success) {
+          this.$message({message: '删除成功', type: 'success'})
+        } else {
+          this.$message({message: '删除失败', type: 'error'})
+        }
+      }).catch(err => console.log(err))
     }
   },
   created: function () {
@@ -136,5 +171,11 @@ export default {
 </script>
 
 <style scoped>
-
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409EFF;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>

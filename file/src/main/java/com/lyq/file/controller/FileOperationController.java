@@ -3,6 +3,7 @@ package com.lyq.file.controller;
 import com.lyq.file.response.RestApiResponse;
 import com.lyq.file.service.IFileOperationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ public class FileOperationController {
 
 
     @GetMapping("/reName")
-    public RestApiResponse<Object> reName(String identifier, String name) {
+    public RestApiResponse<Object> reName(@Param("identifier") String identifier, @Param("name") String name) {
         operationService.reName(identifier, name);
         return RestApiResponse.success();
     }

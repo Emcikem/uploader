@@ -14,7 +14,6 @@ public class FileVO {
 
     private Long updateTime;
 
-
     public String getFileName() {
         return fileName;
     }
