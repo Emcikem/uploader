@@ -79,16 +79,19 @@ export default {
       alert('删除')
     },
     formatTime(updateTime) {
-      return updateTime == null ? new Date() : updateTime
+      return updateTime
     },
     formatSize(totalSize) {
-      return (totalSize == null ? 0 : totalSize / 1024).toFixed(2) + "MB";
+      return (totalSize == null ? 0 : totalSize / 1024 / 1024).toFixed(2) + "MB";
     },
+    // 当前页修改时
     handleCurrentChange(val) {
       this.pageNo = val
       this.handleChange()
     },
+    // 每页个数修改时
     handleSizeChange(val) {
+      this.pageNo = 0
       this.pageSize = val
       this.handleChange()
     },

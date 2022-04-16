@@ -3,18 +3,15 @@ package com.lyq.file;
 import com.lyq.file.dto.es.FileDOC;
 import com.lyq.file.dto.web.FilePageVO;
 import com.lyq.file.dto.web.FileVO;
-import com.lyq.file.mapstruct.FileDocMapper;
-import com.lyq.file.repository.FIleDocRepository;
+import com.lyq.file.repository.FileDocRepository;
 import com.lyq.file.service.IFIleSearchService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.Random;
 
 public class ElasticSearchTest extends BaseTest{
@@ -24,9 +21,9 @@ public class ElasticSearchTest extends BaseTest{
 
     @Test
     public void search() {
-        Pageable pageable =  PageRequest.of(0, 10);
-        FilePageVO<FileVO> search = ifIleSearchService.search("牛赛", pageable);
-//        System.out.println(search);
+        Pageable pageable =  PageRequest.of(0, 100);
+        FilePageVO<FileVO> search = ifIleSearchService.search("", pageable);
+        System.out.println(search);
     }
 
     @Test
@@ -59,27 +56,27 @@ public class ElasticSearchTest extends BaseTest{
 
     @Test
     public void save() {
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            FileDOC fileDOC = FileDOC.builder()
-                    .id((long)i + 10000)
-                    .fileName(NameUtils.getEnName() + ".jpg")
-                    .identifier(NameUtils.getCnName())
-                    .totalSize((long) Math.abs(random.nextInt(100)))
-                    .updateTime(System.currentTimeMillis())
-                    .build();
-            ifIleSearchService.addFile(fileDOC);
-        }
+//        Random random = new Random();
+//        for (int i = 0; i < 100; i++) {
+//            FileDOC fileDOC = FileDOC.builder()
+//                    .id((long) i)
+//                    .fileName(NameUtils.getEnName() + ".jpg")
+//                    .identifier(NameUtils.getCnName())
+//                    .totalSize((long) Math.abs(random.nextInt(100)))
+//                    .updateTime(System.currentTimeMillis())
+//                    .build();
+//            ifIleSearchService.addFile(fileDOC);
+//        }
     }
 
     @Autowired
     private ElasticsearchRestTemplate template;
     @Autowired
-    private FIleDocRepository repository;
+    private FileDocRepository repository;
 
 
     @Test
     public void delete() {
-        repository.deleteAll();
+//        repository.deleteAll();
     }
 }

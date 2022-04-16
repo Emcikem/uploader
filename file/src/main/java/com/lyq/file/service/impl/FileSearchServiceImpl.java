@@ -4,7 +4,7 @@ import com.lyq.file.dto.es.FileDOC;
 import com.lyq.file.dto.web.FilePageVO;
 import com.lyq.file.dto.web.FileVO;
 import com.lyq.file.mapstruct.FileDocMapper;
-import com.lyq.file.repository.FIleDocRepository;
+import com.lyq.file.repository.FileDocRepository;
 import com.lyq.file.service.IFIleSearchService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class FileSearchServiceImpl implements IFIleSearchService {
     private ElasticsearchRestTemplate restTemplate;
 
     @Autowired
-    private FIleDocRepository repository;
+    private FileDocRepository repository;
 
     @Override
     public FilePageVO<FileVO> search(String keyword, Pageable pageable) {
