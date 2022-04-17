@@ -23,11 +23,15 @@ public interface FilePoRepository extends JpaRepository<FIlePO, Integer> {
     @Query(value = "update tbl_file t set t.file_name = ?2 where t.identifier = ?1", nativeQuery = true)
     int reNameByIdentifier(@Param("identifier") String identifier, @Param("name") String name);
 
-
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "delete from tbl_file where identifier in ?", nativeQuery = true)
     int deleteByIdentifiers(List<String> identifiers);
+
+    @Query(value = "select f.file_path from tbl_file as f where identifier = ?", nativeQuery = true)
+    String queryPathByIdentifier(String identifier);
+
+
 
     /**
      * 加了nativeQuery = true后，sql为原生sql，from后写的是表名；

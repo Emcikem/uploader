@@ -5,6 +5,7 @@ import com.lyq.file.repository.FilePoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.util.Random;
 
 
@@ -24,7 +25,7 @@ public class FileOperationTest extends BaseTest {
     @Test
     public void save() {
         Random random = new Random();
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 0; i++) {
             FIlePO po = FIlePO.builder()
                     .id(i)
                     .identifier(NameUtils.getEnName())
@@ -38,5 +39,19 @@ public class FileOperationTest extends BaseTest {
                     .build();
             poMapper.save(po);
         }
+    }
+
+    @Test
+    public void query() {
+        String identifier = poMapper.queryPathByIdentifier("keli");
+        System.out.println(identifier);
+    }
+
+
+    @Test
+    public void cal() {
+        String path = "src/main/resources/file/可莉.jpg";
+        File file = new File(path);
+        System.out.println(file.getName());
     }
 }

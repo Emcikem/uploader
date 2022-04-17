@@ -13,8 +13,8 @@ public class StrategyTest extends BaseTest{
     @Test
     public void initStrategy() {
         StrategyConfigDTO strategyConfigDTO = StrategyConfigDTO.builder()
-                .shouldMerge(true)
-                .folderPath("/Users/emcikem/Desktop")
+                .shouldMerge(false)
+                .folderPath("/home/lighthouse/file")
                 .storeType("LOCAL")
                 .build();
         strategyService.saveStrategyConfig(strategyConfigDTO);
@@ -24,5 +24,4 @@ public class StrategyTest extends BaseTest{
     public void queryStrategy() {
         System.out.println(strategyService.queryStrategy());
     }
-
 }

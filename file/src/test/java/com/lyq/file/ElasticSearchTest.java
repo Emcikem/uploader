@@ -56,17 +56,17 @@ public class ElasticSearchTest extends BaseTest{
 
     @Test
     public void save() {
-//        Random random = new Random();
-//        for (int i = 0; i < 100; i++) {
-//            FileDOC fileDOC = FileDOC.builder()
-//                    .id((long) i)
-//                    .fileName(NameUtils.getEnName() + ".jpg")
-//                    .identifier(NameUtils.getCnName())
-//                    .totalSize((long) Math.abs(random.nextInt(100)))
-//                    .updateTime(System.currentTimeMillis())
-//                    .build();
-//            ifIleSearchService.addFile(fileDOC);
-//        }
+        Random random = new Random();
+        for (int i = 0; i < 1; i++) {
+            FileDOC fileDOC = FileDOC.builder()
+                    .id((long) i)
+                    .fileName(NameUtils.getEnName() + ".jpg")
+                    .identifier(NameUtils.getCnName())
+                    .totalSize((long) Math.abs(random.nextInt(100)))
+                    .updateTime(System.currentTimeMillis())
+                    .build();
+            ifIleSearchService.addFile(fileDOC);
+        }
     }
 
     @Autowired
@@ -77,6 +77,6 @@ public class ElasticSearchTest extends BaseTest{
 
     @Test
     public void delete() {
-//        repository.deleteAll();
+        repository.deleteAll();
     }
 }
