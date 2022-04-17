@@ -14,7 +14,7 @@ public class StrategyTest extends BaseTest{
     public void initStrategy() {
         StrategyConfigDTO strategyConfigDTO = StrategyConfigDTO.builder()
                 .shouldMerge(false)
-                .folderPath("/home/lighthouse/file")
+                .folderPath("file")
                 .storeType("LOCAL")
                 .build();
         strategyService.saveStrategyConfig(strategyConfigDTO);

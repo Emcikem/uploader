@@ -4,13 +4,17 @@ import com.lyq.file.FileServiceStrategy;
 import com.lyq.file.constant.RedisConst;
 import com.lyq.file.dto.FileChunkDTO;
 import com.lyq.file.dto.FileChunkResultDTO;
+import com.lyq.file.dto.entity.FIlePO;
+import com.lyq.file.repository.FilePoRepository;
 import com.lyq.file.service.IFileService;
 import com.lyq.file.service.IUploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 import javax.annotation.Resource;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -26,13 +30,21 @@ public class UploadServiceImpl implements IUploadService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private FilePoRepository repository;
 
     @Resource
     private FileServiceStrategy strategy;
 
 
     @Override
-    public FileChunkResultDTO checkChunkExist(FileChunkDTO chunkDTO) {
+    public FileChunkResultDTO checkChunkExist(FileChunkDTO chunkDTO) throws FileNotFoundException {
+
+        // TODO:删去乱搞
+        if (1 == 1) {
+            saveTOSQL(chunkDTO.getIdentifier(), chunkDTO.getFilename(), chunkDTO.getTotalSize());
+            return new FileChunkResultDTO(true);
+        }
         // 1. 检查redis中是否存在，并且所有分片已经上传完成
         @SuppressWarnings("unchecked")
         Set<Integer> uploaded = (Set<Integer>) redisTemplate.opsForHash()
@@ -49,7 +61,7 @@ public class UploadServiceImpl implements IUploadService {
         // 2. mysql中存在这个数据了，直接秒传
 
 
-        // 3. 创建文件夹用于做分片
+        // 3. 创建文件夹用于做分片，没有这个文件
         String chunkFileFolderPath = getFileFolderPath(chunkDTO.getIdentifier());
         log.info("chunkFileFolderPath: {}", chunkFileFolderPath);
         boolean mkdirs = getFileStrategy().mkdirs(chunkFileFolderPath);
@@ -58,42 +70,55 @@ public class UploadServiceImpl implements IUploadService {
         return new FileChunkResultDTO(false, uploaded);
     }
 
+
     @Override
-    public void uploadChunk(FileChunkDTO chunkDTO) {
+    public void uploadChunk(FileChunkDTO chunkDTO) throws IOException {
         String chunkFileFolderPath = getFileFolderPath(chunkDTO.getIdentifier());
 
-        try {
-            InputStream inputStream = chunkDTO.getFile().getInputStream();
-            String filePath = chunkFileFolderPath + chunkDTO.getChunkNumber();
-            getFileStrategy().copyFile(inputStream, filePath);
+        InputStream inputStream = chunkDTO.getFile().getInputStream();
+        String filePath = chunkFileFolderPath + chunkDTO.getChunkNumber();
+        getFileStrategy().copyFile(inputStream, filePath);
 
-            log.info("文件标识:{},chunkNumber:{}", chunkDTO.getIdentifier(), chunkDTO.getChunkNumber());
+        log.info("文件标识:{},chunkNumber:{}", chunkDTO.getIdentifier(), chunkDTO.getChunkNumber());
 
-            saveToRedis(chunkDTO);
-        } catch (IOException e) {
-            // TODO
-            log.warn("分片创建失败");
-        }
+        saveToRedis(chunkDTO);
     }
 
 
     @Override
-    public boolean mergeChunk(String identifier, String fileName, Integer totalChunks) {
+    public boolean mergeChunk(String identifier, String fileName, Integer totalChunks, Long totalSize) throws FileNotFoundException {
         if (mergeChunks(identifier, fileName, totalChunks)) {
             log.info("合并成功, identifier:{}", identifier);
             getFileStrategy().deleteDirectory(getFileFolderPath(identifier));
             // TODO删除redis的数据
+            saveTOSQL(identifier, fileName, totalSize);
             return true;
         }
         return false;
     }
 
-    private boolean mergeChunks(String identifier, String fileName, Integer totalChunks) {
+    private void saveTOSQL(String identifier, String fileName, Long totalSize) throws FileNotFoundException {
+        FIlePO fIlePO = FIlePO.builder()
+                .filePath(getFilePath(fileName))
+                .updateTime(System.currentTimeMillis())
+                .totalSize(totalSize)
+                .identifier(identifier)
+                .fileType("jpg")
+                .createTime(System.currentTimeMillis())
+                .filename(fileName)
+                .deleted(0)
+                .build();
+
+        repository.save(fIlePO);
+    }
+
+    private boolean mergeChunks(String identifier, String fileName, Integer totalChunks) throws FileNotFoundException {
         String chunkFileFolderPath = getFileFolderPath(identifier);
         String filePath = getFilePath(fileName);
         // 检查分片是否都存在，然后合并分片
         return getFileStrategy().mergeChunks(chunkFileFolderPath, filePath, totalChunks);
     }
+
 
 
     /**
@@ -132,18 +157,20 @@ public class UploadServiceImpl implements IUploadService {
     /**
      * 得到文件存储的绝对路径
      */
-    private String getFilePath(String filename) {
+    private String getFilePath(String filename) throws FileNotFoundException {
         String uploadFolder = getUploadFolder();
-        return String.format("%s/%s", uploadFolder, filename);
+        String prePath = ResourceUtils.getURL("classpath:").getPath();
+        return String.format("%s%s/%s", prePath, uploadFolder, filename);
     }
 
 
     /**
      * 得到文件所属的目录(存放分片文件)
      */
-    private String getFileFolderPath(String identifier) {
+    private String getFileFolderPath(String identifier) throws FileNotFoundException {
         String uploadFolder = getUploadFolder();
-        return String.format("%s/chunk/%s/", uploadFolder, identifier);
+        String prePath = ResourceUtils.getURL("classpath:").getPath();
+        return String.format("%s%s/chunk/%s/", prePath, uploadFolder, identifier);
     }
 
 

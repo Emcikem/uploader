@@ -48,10 +48,4 @@ public class FileOperationTest extends BaseTest {
     }
 
 
-    @Test
-    public void cal() {
-        String path = "src/main/resources/file/可莉.jpg";
-        File file = new File(path);
-        System.out.println(file.getName());
-    }
 }

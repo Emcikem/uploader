@@ -20,7 +20,7 @@ public class SearchController {
 
     @GetMapping("/fileList")
     public RestApiResponse<Object> searchFile(Integer pageNo, Integer pageSize, String keyWord) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         FilePageVO<FileVO> search = searchService.search(keyWord, pageable);
         return RestApiResponse.success(search);
     }

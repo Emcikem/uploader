@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!--    <uploaderComponent></uploaderComponent>-->
-    <!--    <div style="height: 100px"></div>-->
+        <uploaderComponent></uploaderComponent>
+        <div style="height: 100px"></div>
     <SearchFileList></SearchFileList>
 <!--    <div style="height: 300px"></div>-->
 <!--    <strategy-component></strategy-component>-->

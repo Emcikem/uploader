@@ -48,10 +48,6 @@
       layout="sizes, prev, pager, next"
       :total="total">
     </el-pagination>
-
-    <div style="margin-top: 20px">
-      <el-button @click="downLoad">下载</el-button>
-    </div>
   </div>
 </template>
 
@@ -63,7 +59,7 @@ export default {
   name: "FileListComponent",
   data() {
     return {
-      pageNo: 0,
+      pageNo: 1,
       pageSize: 10,
       total: 0,
       tableData: [],
@@ -83,7 +79,7 @@ export default {
     },
     // 每页个数修改时
     handleSizeChange(val) {
-      this.pageNo = 0
+      this.pageNo = 1
       this.pageSize = val
       this.handleChange()
     },
@@ -110,7 +106,7 @@ export default {
       this.identifier = row.identifier
     },
     initPage() {
-      this.pageNo = 0
+      this.pageNo = 1
       this.pageSize = 10
       this.total = 0
       this.keyWord = ''
@@ -156,12 +152,16 @@ export default {
         }
       }).catch(err => console.log(err))
     },
-    downLoadFile() {
-      let link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = 'https://m.bbs.mihoyo.com/app/mihoyobbs_2.26.1_gf.apk'
-      document.body.appendChild(link);
-      link.click();
+    downLoadFile(identifier) {
+      axios.get('http://110.40.220.211:8989/download/direct', {
+        params: { identifier: identifier}
+      }).then((res) => {
+        if (res.data.success) {
+          this.$message({message: '下载成功', type: 'success'})
+        } else {
+          this.$message({message: '下载失败', type: 'error'})
+        }
+      }).catch(err => console.log(err))
     },
   },
   created: function () {

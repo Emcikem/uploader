@@ -7,6 +7,9 @@ import com.lyq.file.service.IUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("upload")
 public class UploadController {
@@ -19,8 +22,12 @@ public class UploadController {
      */
     @GetMapping("/chunk")
     public RestApiResponse<Object> checkChunkExist(FileChunkDTO chunkDTO) {
-        FileChunkResultDTO fileChunkResultDTO = uploadService.checkChunkExist(chunkDTO);
-        return RestApiResponse.success(fileChunkResultDTO);
+        try {
+            FileChunkResultDTO fileChunkResultDTO = uploadService.checkChunkExist(chunkDTO);
+            return RestApiResponse.success(fileChunkResultDTO);
+        } catch (FileNotFoundException e) {
+            return RestApiResponse.error(e.toString());
+        }
     }
 
     /**
@@ -28,8 +35,12 @@ public class UploadController {
      */
     @PostMapping("/chunk")
     public RestApiResponse<Object> uploadChunk(FileChunkDTO chunkDTO) {
-        uploadService.uploadChunk(chunkDTO);
-        return RestApiResponse.success(chunkDTO.getIdentifier());
+        try {
+            uploadService.uploadChunk(chunkDTO);
+            return RestApiResponse.success(chunkDTO.getIdentifier());
+        } catch (IOException e) {
+            return RestApiResponse.error(e.toString());
+        }
     }
 
     /**
@@ -37,7 +48,15 @@ public class UploadController {
      */
     @PostMapping("/merge")
     public RestApiResponse<Object> mergeChunks(@RequestBody FileChunkDTO chunkDTO) {
-        boolean success = uploadService.mergeChunk(chunkDTO.getIdentifier(), chunkDTO.getFilename(), chunkDTO.getTotalChunks());
-        return RestApiResponse.success(success);
+        try {
+            boolean success = uploadService.mergeChunk(
+                    chunkDTO.getIdentifier(),
+                    chunkDTO.getFilename(),
+                    chunkDTO.getTotalChunks(),
+                    chunkDTO.getTotalSize());
+            return RestApiResponse.success(success);
+        } catch (FileNotFoundException e) {
+            return RestApiResponse.error(e.toString());
+        }
     }
 }
