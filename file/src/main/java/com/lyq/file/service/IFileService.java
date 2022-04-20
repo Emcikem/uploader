@@ -17,6 +17,10 @@ public interface IFileService {
      */
     void deleteDirectory(String folderPath);
 
+    /**
+     * 删除文件
+     */
+    boolean deleteFile(String folderPath);
 
     /**
      * 判断文件是否存在

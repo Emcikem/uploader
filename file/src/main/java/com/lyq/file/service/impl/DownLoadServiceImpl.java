@@ -25,7 +25,7 @@ public class DownLoadServiceImpl implements IDownLoadService {
             throw new IOException("没有文件");
         }
 
-        InputStream inputStream = this.getClass().getResourceAsStream(fIlePO.getFilePath());
+        InputStream inputStream = new FileInputStream(fIlePO.getFilePath());
         //强制下载不打开
         resp.setContentType("application/force-download");
         OutputStream out = resp.getOutputStream();

@@ -34,6 +34,11 @@ public class LocalFileServiceImpl implements IFileService {
     }
 
     @Override
+    public boolean deleteFile(String folderPath) {
+        return new File(folderPath).delete();
+    }
+
+    @Override
     public boolean exitsFile(String filePath) {
         File file = new File(filePath);
         return file.exists();

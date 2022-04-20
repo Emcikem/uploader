@@ -7,12 +7,17 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service()
+@Service
 public class OSSFIleServiceImpl implements IFileService {
 
     @Override
     public void deleteDirectory(String folderPath) {
         System.out.println("22");
+    }
+
+    @Override
+    public boolean deleteFile(String folderPath) {
+        return false;
     }
 
     @Override

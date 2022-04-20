@@ -94,7 +94,7 @@ public class UploadServiceImpl implements IUploadService {
 
     private void saveTOSQL(String identifier, String fileName, Long totalSize) {
         FIlePO fIlePO = FIlePO.builder()
-                .filePath(getRelationPath(fileName))
+                .filePath(getFilePath(fileName))
                 .updateTime(System.currentTimeMillis())
                 .totalSize(totalSize)
                 .identifier(identifier)
