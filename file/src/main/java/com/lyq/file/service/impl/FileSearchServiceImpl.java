@@ -1,9 +1,9 @@
 package com.lyq.file.service.impl;
 
+import com.lyq.file.convert.FIleConvert;
 import com.lyq.file.dto.es.FileDOC;
 import com.lyq.file.dto.web.FilePageVO;
 import com.lyq.file.dto.web.FileVO;
-import com.lyq.file.mapstruct.FileDocMapper;
 import com.lyq.file.repository.FileDocRepository;
 import com.lyq.file.service.IFIleSearchService;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ public class FileSearchServiceImpl implements IFIleSearchService {
 
             List<FileVO> collect = all.getContent()
                     .stream()
-                    .map(FileDocMapper.INSTANCE::doc2Vo)
+                    .map(FIleConvert::doc2Vo)
                     .collect(Collectors.toList());
 
             return new FilePageVO<>(
@@ -59,7 +59,7 @@ public class FileSearchServiceImpl implements IFIleSearchService {
 
         List<FileVO> collectVO = collectDocs
                 .stream()
-                .map(FileDocMapper.INSTANCE::doc2Vo)
+                .map(FIleConvert::doc2Vo)
                 .collect(Collectors.toList());
 
         return new FilePageVO<>(

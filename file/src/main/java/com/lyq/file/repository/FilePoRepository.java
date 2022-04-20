@@ -20,8 +20,8 @@ public interface FilePoRepository extends JpaRepository<FIlePO, Integer> {
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "update tbl_file t set t.file_name = ?2 where t.identifier = ?1", nativeQuery = true)
-    int reNameByIdentifier(@Param("identifier") String identifier, @Param("name") String name);
+    @Query(value = "update tbl_file t set t.file_name = ?2, t.update_time = ?3 where t.identifier = ?1", nativeQuery = true)
+    int reNameByIdentifier(String identifier,  String name, Long updateTime);
 
     @Modifying(clearAutomatically = true)
     @Transactional

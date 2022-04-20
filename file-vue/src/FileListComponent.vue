@@ -114,7 +114,7 @@ export default {
     formatTime(updateTime) {
       return updateTime == null ? 'null' : formatDate(new Date(updateTime), 'yyyy-MM-dd hh:mm:ss')
     },
-    formatSize(size, decimalPoint = 2) {
+    formatSize(size) {
       let unit;
       let units = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
       while ( (unit = units.shift()) && size > 1024 ) {
