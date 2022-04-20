@@ -1,13 +1,11 @@
 package com.lyq.file.service.impl;
 
+import com.lyq.file.dto.entity.FIlePO;
 import com.lyq.file.repository.FilePoRepository;
 import com.lyq.file.service.IDownLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -22,24 +20,23 @@ public class DownLoadServiceImpl implements IDownLoadService {
     @Override
     public void download(String identifier, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        String relationPath = filePoRepository.queryPathByIdentifier(identifier);
+        FIlePO fIlePO = filePoRepository.queryByIdentifier(identifier);
+        if (fIlePO == null) {
+            throw new IOException("没有文件");
+        }
 
-        resp.setContentType("application/octet-stream");
-
-        // 获取 resources 根目录下的 的流
-        ClassPathResource resource = new ClassPathResource(relationPath);
-        String filename = resource.getFile().getName();
-        String path = resource.getFile().getPath();
-
-        resp.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
-
-        InputStream inputStream = resource.getInputStream();
-        ServletOutputStream outputStream = resp.getOutputStream();
-        byte[] b = new byte[1024];
-        int len;
-        while ((len = inputStream.read()) > 0) {
-            outputStream.write(b, 0, len);
+        InputStream inputStream = this.getClass().getResourceAsStream(fIlePO.getFilePath());
+        //强制下载不打开
+        resp.setContentType("application/force-download");
+        OutputStream out = resp.getOutputStream();
+        //使用URLEncoder来防止文件名乱码或者读取错误
+        resp.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fIlePO.getFilename(), "UTF-8"));
+        int b;
+        byte[] buffer = new byte[1024];
+        while ((b = inputStream.read(buffer)) > 0) {
+            out.write(buffer, 0, b);
         }
         inputStream.close();
+        out.close();
     }
 }

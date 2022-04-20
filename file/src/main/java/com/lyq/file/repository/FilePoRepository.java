@@ -28,8 +28,8 @@ public interface FilePoRepository extends JpaRepository<FIlePO, Integer> {
     @Query(value = "delete from tbl_file where identifier in ?", nativeQuery = true)
     int deleteByIdentifiers(List<String> identifiers);
 
-    @Query(value = "select f.file_path from tbl_file as f where identifier = ?", nativeQuery = true)
-    String queryPathByIdentifier(String identifier);
+    @Query(value = "select * from tbl_file as f where identifier = ?", nativeQuery = true)
+    FIlePO queryByIdentifier(String identifier);
 
 
 

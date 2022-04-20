@@ -77,12 +77,12 @@ export default {
   methods: {
     fileSuccess(rootFile, file, response, chunk) {
       const result = JSON.parse(response)
-      console.log(result.success, this.skip)
       if (result.success && !this.skip) {
         axios.post("http://110.40.220.211:8989/upload/merge", {
           identifier: file.uniqueIdentifier,
           filename: file.name,
           totalChunks: chunk.offset,
+          totalSize: file.size
         }).then((res) => {
           if (res.data.success) {
             console.log("上传成功")

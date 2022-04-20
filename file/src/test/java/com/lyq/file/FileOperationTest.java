@@ -24,27 +24,27 @@ public class FileOperationTest extends BaseTest {
 
     @Test
     public void save() {
-        Random random = new Random();
-        for (int i = 1; i <= 0; i++) {
-            FIlePO po = FIlePO.builder()
-                    .id(i)
-                    .identifier(NameUtils.getEnName())
-                    .filename(NameUtils.getCnName())
-                    .totalSize((long)Math.abs(random.nextInt(1000000)))
-                    .createTime(System.currentTimeMillis())
-                    .updateTime(System.currentTimeMillis())
-                    .filePath("/root")
-                    .fileType("jpg")
-                    .deleted(0)
-                    .build();
-            poMapper.save(po);
-        }
+//        Random random = new Random();
+//        for (int i = 1; i <= 0; i++) {
+//            FIlePO po = FIlePO.builder()
+//                    .id(i)
+//                    .identifier(NameUtils.getEnName())
+//                    .filename(NameUtils.getCnName())
+//                    .totalSize((long)Math.abs(random.nextInt(1000000)))
+//                    .createTime(System.currentTimeMillis())
+//                    .updateTime(System.currentTimeMillis())
+//                    .filePath("/root")
+//                    .fileType("jpg")
+//                    .deleted(0)
+//                    .build();
+//            poMapper.save(po);
+//        }
     }
 
     @Test
     public void query() {
-        String identifier = poMapper.queryPathByIdentifier("keli");
-        System.out.println(identifier);
+//        FIlePO identifier = poMapper.queryByIdentifier("keli");
+//        System.out.println(identifier);
     }
 
 

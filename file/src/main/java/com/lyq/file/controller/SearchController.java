@@ -22,6 +22,7 @@ public class SearchController {
     public RestApiResponse<Object> searchFile(Integer pageNo, Integer pageSize, String keyWord) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         FilePageVO<FileVO> search = searchService.search(keyWord, pageable);
+        search.setPageNo(search.getPageNo() + 1);
         return RestApiResponse.success(search);
     }
 }

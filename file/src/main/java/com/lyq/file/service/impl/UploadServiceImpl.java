@@ -40,11 +40,6 @@ public class UploadServiceImpl implements IUploadService {
     @Override
     public FileChunkResultDTO checkChunkExist(FileChunkDTO chunkDTO) throws FileNotFoundException {
 
-        // TODO:删去乱搞
-        if (1 == 1) {
-            saveTOSQL(chunkDTO.getIdentifier(), chunkDTO.getFilename(), chunkDTO.getTotalSize());
-            return new FileChunkResultDTO(true);
-        }
         // 1. 检查redis中是否存在，并且所有分片已经上传完成
         @SuppressWarnings("unchecked")
         Set<Integer> uploaded = (Set<Integer>) redisTemplate.opsForHash()
@@ -97,13 +92,13 @@ public class UploadServiceImpl implements IUploadService {
         return false;
     }
 
-    private void saveTOSQL(String identifier, String fileName, Long totalSize) throws FileNotFoundException {
+    private void saveTOSQL(String identifier, String fileName, Long totalSize) {
         FIlePO fIlePO = FIlePO.builder()
-                .filePath(getFilePath(fileName))
+                .filePath(getRelationPath(fileName))
                 .updateTime(System.currentTimeMillis())
                 .totalSize(totalSize)
                 .identifier(identifier)
-                .fileType("jpg")
+                .fileType(fileName.substring(fileName.lastIndexOf(".")))
                 .createTime(System.currentTimeMillis())
                 .filename(fileName)
                 .deleted(0)
@@ -157,19 +152,27 @@ public class UploadServiceImpl implements IUploadService {
     /**
      * 得到文件存储的绝对路径
      */
-    private String getFilePath(String filename) throws FileNotFoundException {
+    private String getFilePath(String filename) {
         String uploadFolder = getUploadFolder();
-        String prePath = ResourceUtils.getURL("classpath:").getPath();
+        String prePath = this.getClass().getClassLoader().getResource("").getPath();
+//        System.out.printf("%s%s/%s%n", prePath, uploadFolder, filename);
         return String.format("%s%s/%s", prePath, uploadFolder, filename);
     }
 
+    /**
+     * 获取相对路径
+     */
+    private String getRelationPath(String filename) {
+        return String.format("/%s/%s", getUploadFolder(), filename);
+    }
 
     /**
      * 得到文件所属的目录(存放分片文件)
      */
-    private String getFileFolderPath(String identifier) throws FileNotFoundException {
+    private String getFileFolderPath(String identifier) {
         String uploadFolder = getUploadFolder();
-        String prePath = ResourceUtils.getURL("classpath:").getPath();
+        String prePath = this.getClass().getClassLoader().getResource("").getPath();
+//        System.out.printf("%s%s/chunk/%s/%n", prePath, uploadFolder, identifier);
         return String.format("%s%s/chunk/%s/", prePath, uploadFolder, identifier);
     }
 
@@ -179,10 +182,12 @@ public class UploadServiceImpl implements IUploadService {
      */
     private IFileService getFileStrategy () {
         String type = (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.STORETYPE);
+        type = type == null ? "LOCAL" : type;
         return strategy.getStrategy(type);
     }
 
     private String getUploadFolder () {
-        return (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.UPLOADERFOLDER);
+        String path = (String) redisTemplate.opsForHash().get(RedisConst.STRATEGY, RedisConst.UPLOADERFOLDER);
+        return path == null ? "file" : path;
     }
 }

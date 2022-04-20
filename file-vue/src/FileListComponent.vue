@@ -156,7 +156,12 @@ export default {
       axios.get('http://110.40.220.211:8989/download/direct', {
         params: { identifier: identifier}
       }).then((res) => {
-        if (res.data.success) {
+        console.log(res)
+        if (res.status === 200) {
+          let a = document.createElement('a');
+          a.download = 'file';
+          a.href = "http://110.40.220.211:8989/download/direct?identifier=" + identifier
+          a.click();
           this.$message({message: '下载成功', type: 'success'})
         } else {
           this.$message({message: '下载失败', type: 'error'})
