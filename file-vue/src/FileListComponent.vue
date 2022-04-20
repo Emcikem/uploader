@@ -114,15 +114,20 @@ export default {
     formatTime(updateTime) {
       return updateTime == null ? 'null' : formatDate(new Date(updateTime), 'yyyy-MM-dd hh:mm:ss')
     },
-    formatSize(totalSize) {
-      return (totalSize == null ? 0 : totalSize / 1024 / 1024).toFixed(2) + "MB";
+    formatSize(size, decimalPoint = 2) {
+      let unit;
+      let units = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
+      while ( (unit = units.shift()) && size > 1024 ) {
+        size = size / 1024;
+      }
+      return (unit === 'B' ? size : size.toFixed( 2)) + unit;
     },
     // 下拉菜单
     handleCommand(command, row) {
       if (command === 'command_delete') {
         this.deleteFile(row.identifier)
       } else if (command === 'command_rename') {
-        this.reNameFile(row.identifier, 'aasa')
+        this.reNameFileMessageBox(row.identifier)
       } else if (command === 'command_download') {
         this.downLoadFile(row.identifier)
       }
@@ -150,6 +155,14 @@ export default {
         } else {
           this.$message({message: '重命名失败', type: 'error'})
         }
+      }).catch(err => console.log(err))
+    },
+    reNameFileMessageBox(identifier) {
+      this.$prompt('重命名', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({ value }) => {
+        this.reNameFile(identifier, value)
       }).catch(err => console.log(err))
     },
     downLoadFile(identifier) {
