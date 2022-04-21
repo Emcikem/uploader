@@ -19,5 +19,29 @@
 1. 分片上传，断点续传，秒传，支持大文件上传。
 2. 支持配置功能，配置存储方式：本地存储，OSS存储，用策略模式，代码可扩展。配置存储位置，是否分片存储。
 3. 搜索功能，采用es的倒排索引，对于海量文件时的搜索功能。
-4. 分布式，可以多机部署。
+4. 分布式，可以多机部署，目前是部署在docker上
 5. 定时任务quarz清理文件随便，防止分片产生的垃圾文件
+
+
+## 配置与部署
+在docker上创建一个uploader文件夹
+```
+mkdri uploader
+```
+把后端jar放到这个文件夹，再创建一个Dockerfile
+```
+FROM java:8
+VOLUME /tmp
+ADD file-uploader.jar file-uploader.jar
+EXPOSE 8989
+ENTRYPOINT ["java", "-jar", "/file-uploader.jar"]
+```
+运行
+```
+ocker build -t file-uploader .
+docker run -d -p 8989:8989 --name file-uploader-8989 file-uploader
+```
+
+### canal
+
+### elasticsearch
