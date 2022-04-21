@@ -1,6 +1,5 @@
 package com.lyq.file;
 
-import com.lyq.file.dto.es.FileDOC;
 import com.lyq.file.dto.web.FilePageVO;
 import com.lyq.file.dto.web.FileVO;
 import com.lyq.file.repository.FileDocRepository;
@@ -77,6 +76,6 @@ public class ElasticSearchTest extends BaseTest{
 
     @Test
     public void delete() {
-        repository.deleteAll();
+//        repository.deleteAll();
     }
 }

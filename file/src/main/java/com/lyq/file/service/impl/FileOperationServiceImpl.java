@@ -37,8 +37,10 @@ public class FileOperationServiceImpl implements IFileOperationService {
         if (fIlePO == null) {
             return;
         }
-        getFileStrategy().deleteFile(fIlePO.getFilePath());
+        // 删除缓存，删除数据库，删除文件
+        redisTemplate.opsForHash().delete(identifier, RedisConst.UPLOADED);
         filePoRepository.deleteByIdentifier(identifier);
+        getFileStrategy().deleteFile(fIlePO.getFilePath());
     }
 
     @Override

@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface IDownLoadService {
 
-    void download(String identifier, HttpServletRequest req, HttpServletResponse resp) throws IOException;
+    void download(String identifier, boolean download, HttpServletRequest req, HttpServletResponse resp) throws IOException;
 }

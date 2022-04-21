@@ -18,7 +18,7 @@ public class DownLoadServiceImpl implements IDownLoadService {
     private FilePoRepository filePoRepository;
 
     @Override
-    public void download(String identifier, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void download(String identifier, boolean download, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         FIlePO fIlePO = filePoRepository.queryByIdentifier(identifier);
         if (fIlePO == null) {
@@ -26,11 +26,13 @@ public class DownLoadServiceImpl implements IDownLoadService {
         }
 
         InputStream inputStream = new FileInputStream(fIlePO.getFilePath());
-        //强制下载不打开
-        resp.setContentType("application/force-download");
         OutputStream out = resp.getOutputStream();
-        //使用URLEncoder来防止文件名乱码或者读取错误
-        resp.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fIlePO.getFilename(), "UTF-8"));
+
+        //使用URLEncoder来防止文件名乱码或者读取错误，并且设置下载
+        if (download) {
+            resp.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fIlePO.getFilename(), "UTF-8"));
+            resp.setContentType("application/force-download");
+        }
         int b;
         byte[] buffer = new byte[1024];
         while ((b = inputStream.read(buffer)) > 0) {

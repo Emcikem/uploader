@@ -14,8 +14,8 @@
       <el-table-column
         label="文件名">
         <template v-slot="scope">
-          {{scope.row.fileName}}
-          <el-dropdown @command="(command)=>{handleCommand(command, scope.row)}" v-show="scope.row.identifier===identifier">
+          <el-button type="text" @click="preViewFile(scope.row.identifier)"> {{scope.row.fileName}} </el-button>
+          <el-dropdown @command="(command)=>{handleCommand(command, scope.row)}" >
             <span class="el-dropdown-link">
               操作<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
@@ -65,7 +65,7 @@ export default {
       tableData: [],
       multipleSelection: [],
       keyWord: '',
-      identifier: ''
+      identifier: '',
     }
   },
   methods: {
@@ -82,6 +82,10 @@ export default {
       this.pageNo = 1
       this.pageSize = val
       this.handleChange()
+    },
+    // 鼠标进入时的操作
+    handleMouseEnter(row) {
+      this.identifier = row.identifier
     },
     // 查询数据
     handleChange() {
@@ -100,10 +104,6 @@ export default {
           this.tableData = result.content
         }
       }).catch(err => console.log(err))
-    },
-    // 鼠标进入时的操作
-    handleMouseEnter(row) {
-      this.identifier = row.identifier
     },
     initPage() {
       this.pageNo = 1
@@ -166,21 +166,15 @@ export default {
       }).catch(err => console.log(err))
     },
     downLoadFile(identifier) {
-      axios.get('http://110.40.220.211:8989/download/direct', {
-        params: { identifier: identifier}
-      }).then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-          let a = document.createElement('a');
-          a.download = 'file';
-          a.href = "http://110.40.220.211:8989/download/direct?identifier=" + identifier
-          a.click();
-          this.$message({message: '下载成功', type: 'success'})
-        } else {
-          this.$message({message: '下载失败', type: 'error'})
-        }
-      }).catch(err => console.log(err))
+      let a = document.createElement('a');
+      a.href = "http://110.40.220.211:8989/download/direct?identifier=" + identifier + "&download=true"
+      a.click();
     },
+    preViewFile(identifier) {
+      let a = document.createElement('a');
+      a.href = "http://110.40.220.211:8989/download/direct?identifier=" + identifier + "&download=false"
+      a.click();
+    }
   },
   created: function () {
     this.handleChange()
@@ -197,7 +191,7 @@ export default {
 <style scoped>
 .el-dropdown-link {
   cursor: pointer;
-  color: #409EFF;
+  color: black;
 }
 .el-icon-arrow-down {
   font-size: 12px;

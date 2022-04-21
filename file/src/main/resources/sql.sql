@@ -28,8 +28,8 @@ CREATE TABLE `tbl_file` (
                             `file_name` varchar(255) NOT NULL COMMENT '文件名称',
                             `identifier` varchar(255) NOT NULL COMMENT '文件Md5',
                             `total_size` bigint(20) DEFAULT NULL COMMENT '文件总大小',
-                            `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                            `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                            `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
+                            `update_time` bigint(20) DEFAULT NULL COMMENT '修改时间',
                             `deleted` int(11) NOT NULL DEFAULT 0 COMMENT '0没有删除，1删除了',
                             PRIMARY KEY (`id`),
                             UNIQUE KEY `identifier` (`identifier`)

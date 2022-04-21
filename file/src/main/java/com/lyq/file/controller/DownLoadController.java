@@ -20,9 +20,9 @@ public class DownLoadController {
     private IDownLoadService downLoadService;
 
     @GetMapping("/direct")
-    public RestApiResponse<Object> doGet(String identifier, HttpServletRequest req, HttpServletResponse resp) {
+    public RestApiResponse<Object> doGet(String identifier, boolean download, HttpServletRequest req, HttpServletResponse resp) {
         try {
-            downLoadService.download(identifier, req, resp);
+            downLoadService.download(identifier, download, req, resp);
             return RestApiResponse.success();
         } catch (IOException e) {
             return RestApiResponse.error(e.toString());

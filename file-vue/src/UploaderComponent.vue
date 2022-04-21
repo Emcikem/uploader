@@ -13,11 +13,6 @@
       >
       </uploader>
     </el-row>
-    <el-row style="margin-top: 20px; text-align: center">
-      <el-button @click="allStart">全部开始</el-button>
-      <el-button @click="allStop">全部暂停</el-button>
-      <el-button @click="allRemove">全部移除</el-button>
-    </el-row>
   </div>
 </template>
 
@@ -161,29 +156,6 @@ export default {
           start + chunkSize >= file.size ? file.size : start + chunkSize;
         fileReader.readAsArrayBuffer(blobSlice.call(file.file, start, end));
       }
-    },
-    allStart() {
-      console.log('开始')
-      this.fileList.map((e) => {
-        if (e.paused) {
-          e.resume()
-        }
-      })
-    },
-    allStop() {
-      console.log('停止')
-      this.fileList.map((e) => {
-        if (!e.paused) {
-          e.paused()
-        }
-      })
-    },
-    allRemove() {
-      console.log('移除')
-      this.fileList.map((e) => {
-        e.cancel()
-      })
-      this.fileList = [];
     },
   }
 }

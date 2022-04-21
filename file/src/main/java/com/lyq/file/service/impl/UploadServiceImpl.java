@@ -11,7 +11,6 @@ import com.lyq.file.service.IUploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
@@ -86,11 +85,14 @@ public class UploadServiceImpl implements IUploadService {
             log.info("合并成功, identifier:{}", identifier);
             getFileStrategy().deleteDirectory(getFileFolderPath(identifier));
             // TODO删除redis的数据
+            deleteRedis(identifier);
             saveTOSQL(identifier, fileName, totalSize);
             return true;
         }
         return false;
     }
+
+
 
     private void saveTOSQL(String identifier, String fileName, Long totalSize) {
         FIlePO fIlePO = FIlePO.builder()
@@ -119,11 +121,11 @@ public class UploadServiceImpl implements IUploadService {
     /**
      * 删除分片缓存数据
      */
-    private void deleteRedis(FileChunkDTO chunkDTO) {
+    private void deleteRedis(String identifier) {
         // 删除分片的缓存
-        redisTemplate.opsForHash().delete(chunkDTO.getIdentifier(), RedisConst.UPLOADED);
-        // 设置为终态
-        redisTemplate.opsForHash().put(chunkDTO.getIdentifier(), RedisConst.ISUPLOADED, "true");
+        redisTemplate.opsForHash().delete(identifier, RedisConst.UPLOADED);
+        // 设置为终态，有待商榷
+//        redisTemplate.opsForHash().put(identifier, RedisConst.ISUPLOADED, "true");
     }
 
     /**
