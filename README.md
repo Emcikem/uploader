@@ -24,6 +24,8 @@
 
 
 ## 配置与部署
+
+### 后端
 在docker上创建一个uploader文件夹
 ```
 mkdri uploader
@@ -41,6 +43,25 @@ ENTRYPOINT ["java", "-jar", "/file-uploader.jar"]
 ocker build -t file-uploader .
 docker run -d -p 8989:8989 --name file-uploader-8989 file-uploader
 ```
+接着把8989端口设置开放
+### 前端
+在uploader里面创建一个文件夹dist，把dist.zip放进去，然后解压
+```
+unzip dist.zip
+```
+创建一个Dockerfile
+```
+FROM nginx:latest
+COPY ./dist /usr/share/nginx/html
+EXPOSE 80
+```
+运行
+```
+docker build -t file-ui .
+docker run -d -p 80:80 --name file-ui--80 file-ui
+```
+开放80端口
+接着，浏览器输入公网ip即可访问前端
 
 ### canal
 
