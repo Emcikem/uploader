@@ -64,5 +64,95 @@ docker run -d -p 80:80 --name file-ui--80 file-ui
 接着，浏览器输入公网ip即可访问前端
 
 ### canal
+有server和adapter两个部分
+```
+docker pull canal/canal-server:latest
+docker run --name canal115 -p 11111:11111 -d canal/canal-server:v1.1.5
+```
+配置
+```
+server:
+  port: 8081
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+canal.conf:
+  mode: tcp #tcp kafka rocketMQ rabbitMQ
+  flatMessage: true
+  zookeeperHosts:
+  syncBatchSize: 1000
+  retries: 0
+  timeout:
+  accessKey:
+  secretKey:
+  consumerProperties:
+    # canal tcp consumer
+    canal.tcp.server.host: 10.0.12.13:11111
+    canal.tcp.zookeeper.hosts:
+    canal.tcp.batch.size: 500
+    canal.tcp.username:
+    canal.tcp.password:
+
+  srcDataSources:
+    defaultDS:
+      url: jdbc:mysql://10.0.12.13:3306/file_uploader?useUnicode=true
+      username: root
+      password: admin
+  canalAdapters:
+  - instance: example # canal instance Name or mq topic name
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: logger
+      - name: es7
+        hosts: 101.43.213.127:9200 # 127.0.0.1:9200 for rest mode
+        properties:
+          mode: rest
+          cluster.name: file-uploader-es
+
+```
+
+```
+docker pull slpcat/canal-adapter:v1.1.5
+docker run --name adapter115 -p 8081:8081 -d slpcat/canal-adapter:v1.1.5
+```
+
+配置
+```
+select 
+f.id as _id, f.file_name as fileName, f.identifier as identifier, f.total_size as totalSize, f.update_time as updateTime
+from 
+tbl_file f
+```
+
 
 ### elasticsearch
+配置
+```
+cluster.name: file-uploader-es
+network.host:0.0.0.0
+
+node.name: node-1
+http.port: 9200
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+node.master: true
+node.data: true
+```
+
+
+### MySQL
+```
+docker pull mysql:5.7.36
+docker run --name mysql5736 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql:5.7.36
+```
+开放3306端口
+### Redis
+```
+docker pull redis:latest
+docker run -itd --name redis -p 6379:6379 redis
+```
+开放6379端口
