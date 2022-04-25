@@ -5,13 +5,14 @@ import com.lyq.file.repository.FilePoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.util.Random;
 
 
 public class FileOperationTest extends BaseTest {
 
-    @Autowired
+    @Resource
     private FilePoRepository poMapper;
 
 

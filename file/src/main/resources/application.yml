@@ -1,3 +1,3 @@
 spring:
-  profile:
-    active: prod
+  profiles:
+    active: dev

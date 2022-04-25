@@ -23,7 +23,7 @@ public class FileOperationServiceImpl implements IFileOperationService {
     @Resource
     private FileServiceStrategy strategy;
 
-    @Autowired
+    @Resource
     private FilePoRepository filePoRepository;
 
     @Override
