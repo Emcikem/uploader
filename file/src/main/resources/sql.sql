@@ -27,6 +27,8 @@ CREATE TABLE `tbl_file` (
                             `file_type` varchar(32) NOT NULL COMMENT '文件类型',
                             `file_name` varchar(255) NOT NULL COMMENT '文件名称',
                             `identifier` varchar(255) NOT NULL COMMENT '文件Md5',
+                            `file_pwd` varchar(64) COMMENT '文件密码',
+                            `creator` varchar(64) NOT NULL COMMENT '文件创建者',
                             `total_size` bigint(20) DEFAULT NULL COMMENT '文件总大小',
                             `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
                             `update_time` bigint(20) DEFAULT NULL COMMENT '修改时间',

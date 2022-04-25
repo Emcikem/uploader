@@ -55,11 +55,17 @@ public class FIlePO implements Serializable {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
-//    /**
-//     * 创建者username
-//     */
-//    @Column(name = "creator", nullable = false)
-//    private String creator;
+    /**
+     * 创建者username
+     */
+    @Column(name = "creator", nullable = false)
+    private String creator;
+
+    /**
+     * 文件密码，为空表示无密码
+     */
+    @Column(name = "file_pwd")
+    private String filePwd;
 
     /**
      * 创建时间

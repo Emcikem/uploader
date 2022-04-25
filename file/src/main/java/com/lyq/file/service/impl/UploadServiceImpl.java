@@ -101,6 +101,8 @@ public class UploadServiceImpl implements IUploadService {
                 .identifier(identifier)
                 .fileType(fileName.substring(fileName.lastIndexOf(".")))
                 .filename(fileName)
+                .creator("chenqiang")
+                .filePwd("")
                 .updateTime(System.currentTimeMillis())
                 .createTime(System.currentTimeMillis())
                 .deleted(0)

@@ -1,20 +1,25 @@
 <template>
   <div style="text-align: center">
     <el-table
-      ref="multipleTable"
       :data="tableData"
-      border
       tooltip-effect="dark"
-      style="margin: auto;"
+      style="margin: auto; width: 100%"
       @cell-mouse-enter="handleMouseEnter"
       @selection-change="handleSelectionChange">
       <el-table-column
-        type="selection">
-      </el-table-column>
-      <el-table-column
+        min-width="80%"
         label="文件名">
         <template v-slot="scope">
           <el-button type="text" @click="preViewFile(scope.row.identifier)"> {{scope.row.fileName}} </el-button>
+          <div style="font-size: 10px">
+            {{ formatTime(scope.row.updateTime) }} {{ formatSize(scope.row.totalSize) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        min-width="20%"
+        label="操作">
+        <template v-slot="scope">
           <el-dropdown @command="(command)=>{handleCommand(command, scope.row)}" >
             <span class="el-dropdown-link">
               操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -26,16 +31,6 @@
             </el-dropdown-menu>
           </el-dropdown>
         </template>
-      </el-table-column>
-
-      <el-table-column
-        label="文件大小">
-        <template v-slot="scope">{{ formatSize(scope.row.totalSize) }}</template>
-      </el-table-column>
-      <el-table-column
-        label="修改日期"
-        show-overflow-tooltip>
-        <template v-slot="scope">{{ formatTime(scope.row.updateTime) }}</template>
       </el-table-column>
     </el-table>
     <el-pagination

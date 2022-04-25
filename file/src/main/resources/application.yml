@@ -1,33 +1,3 @@
-
-server:
-  port: 8989
 spring:
-  servlet:
-    multipart:
-      enabled: true
-      max-request-size: 1000MB
-      max-file-size: 1000MB
-      file-size-threshold: 0
-  redis:
-    host: 101.43.213.127
-    port: 6379
-  mvc:
-    throw-exception-if-no-handler-found: true
-    #    mysql配置
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: admin
-    url: jdbc:mysql://110.40.220.211:3306/file_uploader?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
-    type: com.alibaba.druid.pool.DruidDataSource
-
-  jpa:
-    show-sql: true
-    database: mysql
-    hibernate:
-      ddl-auto: update
-
-  elasticsearch:
-    uris: 101.43.213.127:9200
-
-
+  profile:
+    active: prod
