@@ -90,7 +90,7 @@ canal.conf:
   secretKey:
   consumerProperties:
     # canal tcp consumer
-    canal.tcp.server.host: 10.0.12.13:11111
+    canal.tcp.server.host: 你的服务器地址:11111
     canal.tcp.zookeeper.hosts:
     canal.tcp.batch.size: 500
     canal.tcp.username:
@@ -98,7 +98,7 @@ canal.conf:
 
   srcDataSources:
     defaultDS:
-      url: jdbc:mysql://10.0.12.13:3306/file_uploader?useUnicode=true
+      url: jdbc:mysql://数据库地址:3306/file_uploader?useUnicode=true
       username: root
       password: admin
   canalAdapters:
@@ -108,7 +108,7 @@ canal.conf:
       outerAdapters:
       - name: logger
       - name: es7
-        hosts: 101.43.213.127:9200 # 127.0.0.1:9200 for rest mode
+        hosts: es的地址:9200 # 127.0.0.1:9200 for rest mode
         properties:
           mode: rest
           cluster.name: file-uploader-es
