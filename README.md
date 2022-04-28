@@ -9,9 +9,13 @@
 ## 后端
 
 开发框架springboot
-数据存储 MySQL数据持久哈
+
+数据存储 MySQL
+
 数据缓存 Redis
+
 中间件 canal，负责同步MySQL和elasticsearch的数据
+
 数据搜索 elasticsearch
 
 
